@@ -73,7 +73,7 @@ stages:
   jobs:
 
   - job: Install_AZ_CLI
-    dispalyName: "Install AZ CLI"
+    displayName: "Install AZ CLI"
     steps:
     - task: SSH@0
       inputs:
