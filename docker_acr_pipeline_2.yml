@@ -21,9 +21,9 @@ stages:
     - task: CopyFilesOverSSH@0
       inputs:
         sshEndpoint: 'dev-docker-connection'
-        sourceFolder: "/home/dockeruser/dotnet_code"
-        contents: '**' 
-        targetFolder: "/home/devdockeruser/code_files"
+        sourceFolder: '/home/dockeruser/dotnet_code'
+        contents: '**'
+        targetFolder: '/home/devdockeruser/docefiles'
         readyTimeout: '20000'
 
     - task: CopyFilesOverSSH@0
