@@ -66,5 +66,5 @@ stages:
         sshEndpoint: 'test-docker-connection'
         sourceFolder: '/home/dockeruser/dotnet_code'
         contents: 'docker-compose.yml'
-        targetFolder: '/home/devdockeruser/DockerComposeFiles'
+        targetFolder: '/home/testdockeruser/DockerComposeFiles'
         readyTimeout: '20000'
