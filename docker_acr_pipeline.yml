@@ -69,10 +69,10 @@ stages:
         targetFolder: '/home/testdockeruser/DockerComposeFiles'
         readyTimeout: '20000'
 
-- stage: Run_Dev_Container
+- stage: Run_Containers
   jobs:
 
-  - job: Run_Container
+  - job: Run_Dev_Container
     displayName: "Run Dev Container"
     steps:
     - task: SSH@0
@@ -81,4 +81,15 @@ stages:
         runOptions: 'inline'
         inline: |
           docker compose -f DockerComposeFiles/dev-docker-compose.yml up -d
+        readyTimeout: '20000'
+
+  - job: Run_Test_Container
+    displayName: "Run Test Container"
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'test-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f DockerComposeFiles/test-docker-compose.yml up -d
         readyTimeout: '20000'
