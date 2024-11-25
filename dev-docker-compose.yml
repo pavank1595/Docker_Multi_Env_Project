@@ -9,6 +9,7 @@ services:
 
 networks:
   dev_frontend_network:
+    name: dev_network
     driver: bridge
     ipam:
       driver: default

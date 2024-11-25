@@ -9,6 +9,7 @@ services:
 
 networks:
   test_frontend_network:
+    name: test_network
     driver: bridge
     ipam:
       driver: default
