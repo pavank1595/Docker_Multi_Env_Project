@@ -5,11 +5,10 @@ services:
     ports:
       - 8080:80
     networks:
-      - frontend
+      - dev_frontend_network
 
 networks:
-  frontend:
-    name: dev_frontend_network
+  dev_frontend_network:
     driver: bridge
     ipam:
       driver: default
