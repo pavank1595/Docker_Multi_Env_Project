@@ -6,7 +6,7 @@ pool:
     - Agent.Name -equals linuxagent
 
 stages:
-- stage: Build&Push
+- stage: Build_and_Push
   jobs:
 
   - job: CopyFiles
@@ -44,7 +44,7 @@ stages:
         action: 'Run a Docker Compose command'
         dockerComposeCommand: 'push'
 
-- stage: Deploy&Run
+- stage: Deploy_and_Run
   jobs:
   
   - job: SendComposeFile
