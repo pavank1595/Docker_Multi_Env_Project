@@ -1,0 +1,112 @@
+trigger: none
+
+pool:
+  name: "linuxpool"
+  demands:
+    - Agent.Name -equals linuxagent
+
+stages:
+- stage: CopyFiles
+  jobs:
+
+  - job: CopyFiles
+    displayName: "Copy Files From Default Location"
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: "/home/dockeruser/_work/1/s/"
+        Contents: '**' 
+        TargetFolder: "/home/dockeruser/dotnet_code"
+
+    - task: CopyFilesOverSSH@0
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        sourceFolder: "/home/dockeruser/dotnet_code"
+        contents: '**' 
+        targetFolder: "/home/devdockeruser/code_files"
+        readyTimeout: '20000'
+
+    - task: CopyFilesOverSSH@0
+      inputs:
+        sshEndpoint: 'test-docker-connection'
+        sourceFolder: "/home/dockeruser/dotnet_code"
+        contents: '**' 
+        targetFolder: "/home/testdockeruser/code_files"
+        readyTimeout: '20000'
+
+
+- stage: DevDeployment
+  jobs:
+
+  - job: BuildAndPushDockerfile
+    displayName: "Build and push Dockerfile"
+    steps:
+
+    - task: SSH@0
+      displayName: "Build Dockerfile"
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f /home/devdockeruser/code_files/dev-docker-compose.yml --build
+        readyTimeout: '20000'
+
+    - task: SSH@0
+      displayName: "Push Docker Image"
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f /home/devdockeruser/code_files/dev-docker-compose.yml --push
+        readyTimeout: '20000'
+  
+  - job: RunDevContainer
+    displayName: "Run Dev Container"
+    steps:
+    - task: SSH@0
+      displayName: "Run Dev Container"
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f /home/devdockeruser/code_files/dev-docker-compose.yml up -d
+        readyTimeout: '20000'
+
+
+- stage: TestDeployment
+  jobs:
+
+  - job: BuildAndPushDockerfile
+    displayName: "Build and push Dockerfile"
+    steps:
+
+    - task: SSH@0
+      displayName: "Build Dockerfile"
+      inputs:
+        sshEndpoint: 'test-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f /home/testdockeruser/code_files/test-docker-compose.yml --build
+        readyTimeout: '20000'
+
+    - task: SSH@0
+      displayName: "Push Docker Image"
+      inputs:
+        sshEndpoint: 'test-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f /home/testdockeruser/code_files/test-docker-compose.yml --push
+        readyTimeout: '20000'
+  
+  - job: RunTestContainer
+    displayName: "Run Test Container"
+    steps:
+    - task: SSH@0
+      displayName: "Run Test Container"
+      inputs:
+        sshEndpoint: 'test-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker compose -f /home/devdockeruser/code_files/test-docker-compose.yml up -d
+        readyTimeout: '20000'
+

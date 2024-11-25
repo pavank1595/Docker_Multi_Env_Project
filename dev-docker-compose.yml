@@ -1,6 +1,10 @@
 services:
   web:
-    image: prkappreg.azurecr.io/sampleapp:v1.0
+    build:
+      context: /home/devdockeruser/code_files/
+      dockerfile: Dockerfile
+
+    image: prkappreg.azurecr.io/dev/sampleapp:v1.0
     container_name: dev_app_container
     ports:
       - 8080:80
