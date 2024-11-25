@@ -46,9 +46,22 @@ stages:
 
 - stage: Deploy_and_Run
   jobs:
+
+  - job: AZ_Login
+    displayName: "AZ Login"
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          az login
+          az acr login --name prkappreg
+        readyTimeout: '20000'
   
   - job: SendComposeFileToDev
     displayName: "Send docker-compose file to Dev"
+    dependsOn: AZ_Login
     steps:
     - task: CopyFilesOverSSH@0
       inputs:
@@ -60,6 +73,7 @@ stages:
 
   - job: SendComposeFileToTest
     displayName: "Send docker-compose file to Test"
+    dependsOn: AZ_Login
     steps:
     - task: CopyFilesOverSSH@0
       inputs:
