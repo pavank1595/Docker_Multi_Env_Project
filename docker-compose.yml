@@ -4,18 +4,3 @@ services:
       context: /home/dockeruser/dotnet_code/
       dockerfile: Dockerfile
     image: prkappreg.azurecr.io/sampleapp:v1.0
-    container_name: test_app_container
-    networks:
-      - test_frontend_network
-    ports:
-      - 8080:80
-
-
-networks:
-  test_frontend_network:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.20.0.0/16
-          ip_range: 10.20.1.0/24
