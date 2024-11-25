@@ -70,7 +70,8 @@ stages:
         readyTimeout: '20000'
 
 - stage: Run_Dev_Container
-
+  jobs:
+  
   - job: Install_AZ_CLI
     dsipalyName: "Install AZ CLI"
     steps:
