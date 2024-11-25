@@ -71,9 +71,9 @@ stages:
 
 - stage: Run_Dev_Container
   jobs:
-  
+
   - job: Install_AZ_CLI
-    dsipalyName: "Install AZ CLI"
+    dispalyName: "Install AZ CLI"
     steps:
     - task: SSH@0
       inputs:
