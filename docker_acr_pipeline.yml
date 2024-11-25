@@ -48,11 +48,22 @@ stages:
   jobs:
   
   - job: SendComposeFile
-    displayName: "Send docker-compose file"
+    displayName: "Send docker-compose file to Dev"
     steps:
     - task: CopyFilesOverSSH@0
       inputs:
         sshEndpoint: 'dev-docker-connection'
+        sourceFolder: '/home/dockeruser/dotnet_code/docker-compose.yml'
+        contents: '**'
+        targetFolder: '/home/devdockeruser/'
+        readyTimeout: '20000'
+
+  - job: SendComposeFile
+    displayName: "Send docker-compose file to Test"
+    steps:
+    - task: CopyFilesOverSSH@0
+      inputs:
+        sshEndpoint: 'test-docker-connection'
         sourceFolder: '/home/dockeruser/dotnet_code/docker-compose.yml'
         contents: '**'
         targetFolder: '/home/devdockeruser/'
