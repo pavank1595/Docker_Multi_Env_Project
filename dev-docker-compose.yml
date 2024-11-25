@@ -1,7 +1,7 @@
 services:
   web:
     image: prkappreg.azurecr.io/sampleapp:v1.0
-    container_name: sampleapp_container
+    container_name: dev_app_container
     ports:
       - 8080:80
     networks:
