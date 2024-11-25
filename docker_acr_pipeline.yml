@@ -69,9 +69,22 @@ stages:
         targetFolder: '/home/testdockeruser/DockerComposeFiles'
         readyTimeout: '20000'
 
-- stage: AZ_ACR_Login
+- stage: Run_Dev_Container
+
+  - job: Install_AZ_CLI
+    dsipalyName: "Install AZ CLI"
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+        readyTimeout: '20000'
+
   - job: AZ_Login
     displayName: "AZ Login"
+    dependsOn: Install_AZ_CLI
     steps:
     - task: SSH@0
       inputs:
