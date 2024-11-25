@@ -9,10 +9,10 @@ services:
 
 networks:
   frontend:
-    name: my_frontend_network
+    name: dev_frontend_network
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 10.20.0.0/16
-          ip_range: 10.20.1.0/24
+        - subnet: 10.10.0.0/16
+          ip_range: 10.10.1.0/24
