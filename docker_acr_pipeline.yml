@@ -54,7 +54,7 @@ stages:
       inputs:
         sshEndpoint: 'dev-docker-connection'
         sourceFolder: '/home/dockeruser/dotnet_code'
-        contents: 'docker-compose.yml'
+        contents: 'dev-docker-compose.yml'
         targetFolder: '/home/devdockeruser/DockerComposeFiles'
         readyTimeout: '20000'
 
@@ -65,44 +65,20 @@ stages:
       inputs:
         sshEndpoint: 'test-docker-connection'
         sourceFolder: '/home/dockeruser/dotnet_code'
-        contents: 'docker-compose.yml'
+        contents: 'test-docker-compose.yml'
         targetFolder: '/home/testdockeruser/DockerComposeFiles'
         readyTimeout: '20000'
 
 - stage: Run_Dev_Container
   jobs:
 
-  - job: Install_AZ_CLI
-    displayName: "Install AZ CLI"
+  - job: Run_Container
+    displayName: "Run Dev Container"
     steps:
     - task: SSH@0
       inputs:
         sshEndpoint: 'dev-docker-connection'
         runOptions: 'inline'
         inline: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-        readyTimeout: '20000'
-
-  - job: AZ_Login
-    displayName: "AZ Login"
-    dependsOn: Install_AZ_CLI
-    steps:
-    - task: SSH@0
-      inputs:
-        sshEndpoint: 'dev-docker-connection'
-        runOptions: 'inline'
-        inline: |
-          az login
-        readyTimeout: '20000'
-
-  - job: ACR_Login
-    displayName: "ACR Login"
-    dependsOn: AZ_Login
-    steps:
-    - task: SSH@0
-      inputs:
-        sshEndpoint: 'dev-docker-connection'
-        runOptions: 'inline'
-        inline: |
-          az acr login --name prkappreg
+          docker compose -f DockerComposeFiles/dev-docker-compose.yml up -d
         readyTimeout: '20000'
