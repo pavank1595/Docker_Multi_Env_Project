@@ -4,6 +4,8 @@ services:
       context: /home/dockeruser/dotnet_code/
       dockerfile: Dockerfile
     image: prkappreg.azurecr.io/sampleapp:v1.0
+    networks:
+      - test_frontend_network
     ports:
       - 8080:80
 
