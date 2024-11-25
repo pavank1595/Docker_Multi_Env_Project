@@ -45,52 +45,27 @@ stages:
         action: 'Run a Docker Compose command'
         dockerComposeCommand: 'push'
 
-# - stage: Deploy_Files
-#   jobs:
+- stage: Run_Containers
+  jobs:
 
-#   - job: SendComposeFileToDev
-#     displayName: "Send docker-compose file to Dev"
-#     steps:
-#     - task: CopyFilesOverSSH@0
-#       inputs:
-#         sshEndpoint: 'dev-docker-connection'
-#         sourceFolder: '/home/dockeruser/dotnet_code'
-#         contents: 'dev-docker-compose.yml'
-#         targetFolder: '/home/devdockeruser/DockerComposeFiles'
-#         readyTimeout: '20000'
+  - job: Run_Dev_Container
+    displayName: "Run Dev Container"
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'dev-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker run -d -p 8080:80 --name dev_app_container prkappreg.azurecr.io/sampleapp:v1.0
+        readyTimeout: '20000'
 
-#   - job: SendComposeFileToTest
-#     displayName: "Send docker-compose file to Test"
-#     steps:
-#     - task: CopyFilesOverSSH@0
-#       inputs:
-#         sshEndpoint: 'test-docker-connection'
-#         sourceFolder: '/home/dockeruser/dotnet_code'
-#         contents: 'test-docker-compose.yml'
-#         targetFolder: '/home/testdockeruser/DockerComposeFiles'
-#         readyTimeout: '20000'
-
-# - stage: Run_Containers
-#   jobs:
-
-#   - job: Run_Dev_Container
-#     displayName: "Run Dev Container"
-#     steps:
-#     - task: SSH@0
-#       inputs:
-#         sshEndpoint: 'dev-docker-connection'
-#         runOptions: 'inline'
-#         inline: |
-#           docker run -d -p 8080:80 --name dev_app_container prkappreg.azurecr.io/sampleapp:v1.0
-#         readyTimeout: '20000'
-
-#   - job: Run_Test_Container
-#     displayName: "Run Test Container"
-#     steps:
-#     - task: SSH@0
-#       inputs:
-#         sshEndpoint: 'test-docker-connection'
-#         runOptions: 'inline'
-#         inline: |
-#           docker run -d -p 8080:80 --name dev_app_container prkappreg.azurecr.io/sampleapp:v1.0
-#         readyTimeout: '20000'
+  - job: Run_Test_Container
+    displayName: "Run Test Container"
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'test-docker-connection'
+        runOptions: 'inline'
+        inline: |
+          docker run -d -p 8080:80 --name dev_app_container prkappreg.azurecr.io/sampleapp:v1.0
+        readyTimeout: '20000'
