@@ -9,35 +9,6 @@ stages:
 - stage: CopyFiles
   jobs:
 
-  - job: CopyFiles
-    displayName: "Copy Files From Default Location"
-    steps:
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: "/home/dockeruser/_work/1/s/"
-        Contents: '**' 
-        TargetFolder: "/home/dockeruser/dotnet_code"
-
-    - task: CopyFilesOverSSH@0
-      inputs:
-        sshEndpoint: 'dev-docker-connection'
-        sourceFolder: "/home/dockeruser/dotnet_code"
-        contents: '**' 
-        targetFolder: "/home/devdockeruser/code_files"
-        readyTimeout: '20000'
-
-    - task: CopyFilesOverSSH@0
-      inputs:
-        sshEndpoint: 'test-docker-connection'
-        sourceFolder: "/home/dockeruser/dotnet_code"
-        contents: '**' 
-        targetFolder: "/home/testdockeruser/code_files"
-        readyTimeout: '20000'
-
-
-- stage: DevDeployment
-  jobs:
-
   - job: BuildAndPushDockerfile
     displayName: "Build and push Dockerfile"
     steps:
