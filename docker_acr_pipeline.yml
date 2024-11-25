@@ -47,7 +47,7 @@ stages:
 - stage: Deploy_and_Run
   jobs:
   
-  - job: SendComposeFile
+  - job: SendComposeFileToDev
     displayName: "Send docker-compose file to Dev"
     steps:
     - task: CopyFilesOverSSH@0
@@ -58,7 +58,7 @@ stages:
         targetFolder: '/home/devdockeruser/'
         readyTimeout: '20000'
 
-  - job: SendComposeFile
+  - job: SendComposeFileToTest
     displayName: "Send docker-compose file to Test"
     steps:
     - task: CopyFilesOverSSH@0
