@@ -33,6 +33,7 @@ stages:
 
   - job: PushDockerImage
     displayName: "Push Docker Image to ACR"
+    dependsOn: BuildDockerfile
     steps:
     - task: DockerCompose@1
       inputs:
