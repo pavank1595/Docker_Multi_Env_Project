@@ -81,7 +81,7 @@ stages:
         sshEndpoint: 'dev-docker-connection'
         runOptions: 'inline'
         inline: |
-          docker compose -f /home/devdockeruser/DockerComposeFiles/dev-docker-compose.yml up -d
+          docker run -d -p 8080:80 --name dev_app_container prkappreg.azurecr.io/sampleapp:v1.0
         readyTimeout: '20000'
 
   - job: Run_Test_Container
@@ -92,5 +92,5 @@ stages:
         sshEndpoint: 'test-docker-connection'
         runOptions: 'inline'
         inline: |
-          docker compose -f /home/testdockeruser/DockerComposeFiles/test-docker-compose.yml up -d
+          docker run -d -p 8080:80 --name dev_app_container prkappreg.azurecr.io/sampleapp:v1.0
         readyTimeout: '20000'
