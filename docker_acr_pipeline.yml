@@ -81,7 +81,7 @@ stages:
         sshEndpoint: 'dev-docker-connection'
         runOptions: 'inline'
         inline: |
-          docker compose -f DockerComposeFiles/dev-docker-compose.yml up -d
+          docker compose -f /home/devdockeruser/DockerComposeFiles/dev-docker-compose.yml up -d
         readyTimeout: '20000'
 
   - job: Run_Test_Container
@@ -92,5 +92,5 @@ stages:
         sshEndpoint: 'test-docker-connection'
         runOptions: 'inline'
         inline: |
-          docker compose -f DockerComposeFiles/test-docker-compose.yml up -d
+          docker compose -f /home/testdockeruser/DockerComposeFiles/test-docker-compose.yml up -d
         readyTimeout: '20000'
