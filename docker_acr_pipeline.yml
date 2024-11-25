@@ -1,0 +1,39 @@
+trigger: none
+
+pool:
+  name: "linuxpool"
+  demands:
+    - Agent.Name -equals linuxagent
+
+steps:
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: "/home/dockeruser/_work/1/s/"
+    Contents: '**' 
+    TargetFolder: "/home/dockeruser/dotnet_code"
+
+# - task: CmdLine@2
+#   inputs:
+#     script: "docker build -t myimage:v1.0 ."
+#     workingDirectory: "/home/dockeruser/dotnet_code/"
+
+- task: DockerCompose@1
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'devops-azure-connection'
+    azureContainerRegistry: '{"loginServer":"prkapp.azurecr.io", "id" : "/subscriptions/315346d8-947a-4fa6-85ba-e2a58ea2f051/resourceGroups/rg-acr/providers/Microsoft.ContainerRegistry/registries/prkapp"}'
+    dockerComposeFile: '/home/dockeruser/dotnet_code/docker-compose.yml'
+    projectName: "prkapp"
+    action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'build'
+
+
+- task: DockerCompose@1
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'devops-azure-connection'
+    azureContainerRegistry: '{"loginServer":"prkapp.azurecr.io", "id" : "/subscriptions/315346d8-947a-4fa6-85ba-e2a58ea2f051/resourceGroups/rg-acr/providers/Microsoft.ContainerRegistry/registries/prkapp"}'
+    dockerComposeFile: '/home/dockeruser/dotnet_code/docker-compose.yml'
+    projectName: 'prkapp'
+    action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'push'
